@@ -2,8 +2,9 @@
 /* eslint-disable no-underscore-dangle */
 
 class Handler {
-  constructor(service) {
+  constructor(service, validator) {
     this._service = service;
+    this._validator = validator;
     this.saveHandler = this.saveHandler.bind(this);
     this.findByIdHandler = this.findByIdHandler.bind(this);
     this.updateByIdHandler = this.updateByIdHandler.bind(this);
@@ -12,6 +13,7 @@ class Handler {
 
   async saveHandler(request, h) {
     try {
+      this._validator.validate(request.payload);
       const { name, year } = request.payload;
       const id = await this._service.save({ name, year });
       const response = h.response({
@@ -58,6 +60,7 @@ class Handler {
 
   async updateByIdHandler(request, h) {
     try {
+      this._validator.validate(request.payload);
       const { id } = request.params;
       const result = await this._service.updateById(id, request.payload);
       const response = h.response({

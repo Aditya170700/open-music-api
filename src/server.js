@@ -2,8 +2,11 @@
 /* eslint-disable no-console */
 require('dotenv').config();
 const Hapi = require('@hapi/hapi');
+
+// Albums resource
 const albums = require('./api/albums');
 const AlbumService = require('./services/postgres/AlbumService');
+const AlbumValidator = require('./validator/albums');
 
 const init = async () => {
   const albumService = new AlbumService();
@@ -22,7 +25,7 @@ const init = async () => {
     plugin: albums,
     options: {
       albumService,
-      // validator
+      AlbumValidator,
     },
   });
 
