@@ -3,6 +3,8 @@
 
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
+const InvariantError = require('../../exceptions/InvariantError');
+const NotFoundError = require('../../exceptions/NotFoundError');
 
 class AlbumService {
   constructor() {
@@ -20,7 +22,7 @@ class AlbumService {
     const result = await this._pool.query(query);
 
     if (!result.rows[0].id) {
-      throw new Error('Failed to save album');
+      throw new InvariantError('Unable to create album');
     }
 
     return result.rows[0].id;
@@ -34,7 +36,7 @@ class AlbumService {
     const result = await this._pool.query(query);
 
     if (!result.rows[0]) {
-      throw new Error('Album not found');
+      throw new NotFoundError('Unable to find album by id');
     }
 
     return result.rows[0];
@@ -49,7 +51,7 @@ class AlbumService {
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new Error('Failed to update album');
+      throw new NotFoundError('Unable to update album');
     }
 
     return result;
@@ -63,7 +65,7 @@ class AlbumService {
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new Error('Failed to delete album');
+      throw new NotFoundError('Unable to delete album');
     }
 
     return result;

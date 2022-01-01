@@ -1,6 +1,8 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-underscore-dangle */
 
+const ClientError = require('../../exceptions/ClientError');
+
 class Handler {
   constructor(service, validator) {
     this._service = service;
@@ -26,9 +28,18 @@ class Handler {
       response.code(201);
       return response;
     } catch (error) {
+      if (error instanceof ClientError) {
+        const response = h.response({
+          status: 'fail',
+          message: error.message,
+        });
+        response.code(error.statusCode);
+        return response;
+      }
+
       const response = h.response({
         status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
+        message: 'Server Error',
       });
       response.code(500);
       return response;
@@ -49,9 +60,18 @@ class Handler {
       response.code(200);
       return response;
     } catch (error) {
+      if (error instanceof ClientError) {
+        const response = h.response({
+          status: 'fail',
+          message: error.message,
+        });
+        response.code(error.statusCode);
+        return response;
+      }
+
       const response = h.response({
         status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
+        message: 'Server Error',
       });
       response.code(500);
       return response;
@@ -73,9 +93,18 @@ class Handler {
       response.code(200);
       return response;
     } catch (error) {
+      if (error instanceof ClientError) {
+        const response = h.response({
+          status: 'fail',
+          message: error.message,
+        });
+        response.code(error.statusCode);
+        return response;
+      }
+
       const response = h.response({
         status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
+        message: 'Server Error',
       });
       response.code(500);
       return response;
@@ -96,9 +125,18 @@ class Handler {
       response.code(200);
       return response;
     } catch (error) {
+      if (error instanceof ClientError) {
+        const response = h.response({
+          status: 'fail',
+          message: error.message,
+        });
+        response.code(error.statusCode);
+        return response;
+      }
+
       const response = h.response({
         status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
+        message: 'Server Error',
       });
       response.code(500);
       return response;
