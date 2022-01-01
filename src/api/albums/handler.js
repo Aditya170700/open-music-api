@@ -2,6 +2,7 @@
 /* eslint-disable no-underscore-dangle */
 
 const ClientError = require('../../exceptions/ClientError');
+const { response } = require('../../utils/response');
 
 class Handler {
   constructor(service, validator) {
@@ -18,31 +19,13 @@ class Handler {
       this._validator.validate(request.payload);
       const { name, year } = request.payload;
       const id = await this._service.save({ name, year });
-      const response = h.response({
-        status: 'success',
-        data: {
-          albumId: id,
-        },
-        message: 'Album saved successfully',
-      });
-      response.code(201);
-      return response;
+      return response(h, 'success', 201, 'Album saved successfully', { albumId: id });
     } catch (error) {
       if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
+        return response(h, 'fail', error.statusCode, error.message);
       }
 
-      const response = h.response({
-        status: 'error',
-        message: 'Server Error',
-      });
-      response.code(500);
-      return response;
+      return response(h);
     }
   }
 
@@ -50,31 +33,13 @@ class Handler {
     try {
       const { id } = request.params;
       const album = await this._service.findById(id);
-      const response = h.response({
-        status: 'success',
-        data: {
-          album,
-        },
-        message: 'Album found successfully',
-      });
-      response.code(200);
-      return response;
+      return response(h, 'success', 200, 'Album found successfully', { album });
     } catch (error) {
       if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
+        return response(h, 'fail', error.statusCode, error.message);
       }
 
-      const response = h.response({
-        status: 'error',
-        message: 'Server Error',
-      });
-      response.code(500);
-      return response;
+      return response(h);
     }
   }
 
@@ -83,31 +48,13 @@ class Handler {
       this._validator.validate(request.payload);
       const { id } = request.params;
       const result = await this._service.updateById(id, request.payload);
-      const response = h.response({
-        status: 'success',
-        data: {
-          result,
-        },
-        message: 'Album updated successfully',
-      });
-      response.code(200);
-      return response;
+      return response(h, 'success', 200, 'Album updated successfully', { result });
     } catch (error) {
       if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
+        return response(h, 'fail', error.statusCode, error.message);
       }
 
-      const response = h.response({
-        status: 'error',
-        message: 'Server Error',
-      });
-      response.code(500);
-      return response;
+      return response(h);
     }
   }
 
@@ -115,31 +62,13 @@ class Handler {
     try {
       const { id } = request.params;
       const result = await this._service.deleteById(id);
-      const response = h.response({
-        status: 'success',
-        data: {
-          result,
-        },
-        message: 'Album deleted successfully',
-      });
-      response.code(200);
-      return response;
+      return response(h, 'success', 200, 'Album deleted successfully', { result });
     } catch (error) {
       if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
+        return response(h, 'fail', error.statusCode, error.message);
       }
 
-      const response = h.response({
-        status: 'error',
-        message: 'Server Error',
-      });
-      response.code(500);
-      return response;
+      return response(h);
     }
   }
 }
