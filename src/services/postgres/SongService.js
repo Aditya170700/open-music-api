@@ -4,7 +4,7 @@
 
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
-const { findAllMapper } = require('../../utils/mapper/songs/findAll');
+const { findAllMapper, findByIdMapper } = require('../../utils/mapper/songs');
 const InvariantError = require('../../exceptions/InvariantError');
 const NotFoundError = require('../../exceptions/NotFoundError');
 
@@ -49,7 +49,7 @@ class AlbumService {
       throw new NotFoundError('Unable to find song by id');
     }
 
-    return result.rows[0];
+    return result.rows.map(findByIdMapper)[0];
   }
 
   async updateById(id, { title, year, genre, performer, duration, albumId }) {

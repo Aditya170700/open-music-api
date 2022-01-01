@@ -3,6 +3,7 @@
 
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
+const { findByIdMapper } = require('../../utils/mapper/albums');
 const InvariantError = require('../../exceptions/InvariantError');
 const NotFoundError = require('../../exceptions/NotFoundError');
 
@@ -39,7 +40,7 @@ class AlbumService {
       throw new NotFoundError('Unable to find album by id');
     }
 
-    return result.rows[0];
+    return result.rows.map(findByIdMapper)[0];
   }
 
   async updateById(id, { name, year }) {
