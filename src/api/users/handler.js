@@ -3,6 +3,7 @@
 /* eslint-disable no-console */
 
 const ClientError = require('../../exceptions/ClientError');
+const { response } = require('../../utils/response');
 
 class UsersHandler {
   constructor(service, validator) {
@@ -21,33 +22,13 @@ class UsersHandler {
 
       const userId = await this._service.add({ username, password, fullname });
 
-      const response = h.response({
-        status: 'success',
-        message: 'User berhasil ditambahkan',
-        data: {
-          userId,
-        },
-      });
-      response.code(201);
-      return response;
+      return response(h, 'success', 201, 'User created successfully', { userId });
     } catch (error) {
       if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
+        return response(h, 'fail', error.statusCode, error.message);
       }
 
-      // Server ERROR!
-      const response = h.response({
-        status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
-      });
-      response.code(500);
-      console.error(error);
-      return response;
+      return response(h);
     }
   }
 
@@ -57,30 +38,13 @@ class UsersHandler {
 
       const user = await this._service.getById(id);
 
-      return {
-        status: 'success',
-        data: {
-          user,
-        },
-      };
+      return response(h, 'success', 200, 'User found successfully', { user });
     } catch (error) {
       if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
+        return response(h, 'fail', error.statusCode, error.message);
       }
 
-      // server ERROR!
-      const response = h.response({
-        status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
-      });
-      response.code(500);
-      console.error(error);
-      return response;
+      return response(h);
     }
   }
 
@@ -88,30 +52,13 @@ class UsersHandler {
     try {
       const { username = '' } = request.query;
       const users = await this._service.getUsersByUsername(username);
-      return {
-        status: 'success',
-        data: {
-          users,
-        },
-      };
+      return response(h, 'success', 200, 'Users found successfully', { users });
     } catch (error) {
       if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
+        return response(h, 'fail', error.statusCode, error.message);
       }
 
-      // Server ERROR!
-      const response = h.response({
-        status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
-      });
-      response.code(500);
-      console.error(error);
-      return response;
+      return response(h);
     }
   }
 }
